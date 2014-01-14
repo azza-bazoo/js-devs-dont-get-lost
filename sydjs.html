@@ -19,7 +19,10 @@
 
   <link href="css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">
 <!--   <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"> -->
+
   <link href="http://fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet">
+<link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
+
   <link href="styles.css" rel="stylesheet">
 
 </head>
@@ -54,6 +57,22 @@
 
 <a href="http://niemann.blogs.nytimes.com/2010/03/10/my-way/">Art by Christoph Niemann</a> at the <a href="http://google-latlong.blogspot.com/2010/07/mapping-out-our-new-building-with-art.html">Googleplex</a>
 </section>
+
+
+<section>
+
+  <code>
+  <p>$ curl -Lo abs_suburbs.zip "http://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055003_ssc_2011_aust_shape.zip&amp;1270.0.55.003&amp;Data%20Cubes&amp;D68DFFC14D31F4E1CA2578D40013268D&amp;0&amp;July%202011&amp;22.07.2011&amp;Previous"</p>
+  <p>$ unzip abs_suburbs.zip</p>
+  <p>$ ogr2ogr -f GeoJSON sydney.geojson SSC_2011_AUST.shp -clipsrc 150.84 -33.73 151.32 -34.09</p>
+  </code>
+
+  <div style="margin-top:80px">
+    <img src="other-img/abs_geography.png" alt="">
+  </div>
+
+</section>
+
 
 <section>
 (picture of Google Maps with lots of pins)
@@ -183,6 +202,10 @@ Vectors! Accelerated graphics! Oh my!
 <section data-background="image.png">
   <h2>Vectors and The Third Dimension</h2>
 
+  <div class="light-background" style="margin-top:500px">
+    <p>New Google Maps view of the same area, with lidar / laser altimetry</p>
+    <p>(note trees, bridges)</p>
+  </div>
 </section>
 
 
