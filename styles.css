@@ -81,6 +81,13 @@ a {
   color: inherit;
 }
 
+.img_clip {
+  width: 95%;
+  height: 630px;
+  margin: 0;
+  overflow: hidden;
+}
+
 .small {
   font-size: smaller;
 }

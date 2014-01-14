@@ -44,6 +44,9 @@
 </section>
 
 
+<section>
+  <img src="memes/6748218624.jpg">
+</section>
 
 <section data-background="other-img/wanganui-district-intramaps.png">
   <h2 class="light-background">Mapping in the old days</h2><br><br>
@@ -60,19 +63,101 @@
 
 
 <section>
-
   <code>
-  <p>$ curl -Lo abs_suburbs.zip "http://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055003_ssc_2011_aust_shape.zip&amp;1270.0.55.003&amp;Data%20Cubes&amp;D68DFFC14D31F4E1CA2578D40013268D&amp;0&amp;July%202011&amp;22.07.2011&amp;Previous"</p>
-  <p>$ unzip abs_suburbs.zip</p>
-  <p>$ ogr2ogr -f GeoJSON sydney.geojson SSC_2011_AUST.shp -clipsrc 150.84 -33.73 151.32 -34.09</p>
+    <p>$ curl -Lo abs_suburbs.zip "http://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055003_ssc_2011_aust_shape.zip&amp;1270.0.55.003&amp;Data%20Cubes&amp;D68DFFC14D31F4E1CA2578D40013268D&amp;0&amp;July%202011&amp;22.07.2011&amp;Previous"</p>
+    <p>$ unzip abs_suburbs.zip</p>
+    <p>$ ogr2ogr -f GeoJSON sydney.geojson SSC_2011_AUST.shp -clipsrc 150.84 -33.73 151.32 -34.09</p>
   </code>
 
   <div style="margin-top:80px">
-    <img src="other-img/abs_geography.png" alt="">
+    <img src="d3-map/abs_geography.png" style="width:80%" alt="">
   </div>
-
 </section>
 
+<section>
+  <pre><code>
+    d3.json("sydney.geojson", function(error, map_features) {
+      console.log(map_features);
+    });
+  </code></pre>
+
+  <div style="margin-top:50px">
+    <img src="d3-map/geojson.png" alt="">
+  </div>
+</section>
+
+<section>
+  <pre><code>
+    var width = 900, height = 700;
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var projection = d3.geo.mercator()
+      .center([151.15, -33.90])
+      .scale(98000)
+      .translate([width / 2, height / 2]);
+
+    d3.json("sydney.geojson", function(error, map_features) {
+      svg.append("path")
+          .datum(map_features)
+          .attr("d", d3.geo.path().projection(projection));
+    });
+  </code></pre>
+</section>
+
+<section>
+  <div class="img_clip">
+    <img src="d3-map/single_path.png">
+  </div>
+</section>
+
+<section>
+  <pre><code>
+    var width = 900, height = 700;
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var projection = d3.geo.mercator()
+        .center([151.15, -33.88])
+        .scale(120000)
+        .translate([width / 2, height / 2]);
+
+    var path = d3.geo.path().projection(projection);
+
+    d3.json("sydney.geojson", function(error, map_features) {
+
+      svg.selectAll("path")
+          .data(map_features.features)
+          .enter().append("path")
+            .attr("class", "suburb")
+            .attr("d", path);
+
+    });
+  </code></pre>
+</section>
+
+<section>
+  <div class="img_clip">
+    <img src="d3-map/individual_paths.png">
+  </div>
+</section>
+
+<section data-background="d3-map/final.png">
+  <pre style="margin-top:430px;float:left;"><code>
+    svg {
+      background: #deebf7;
+    }
+
+    path.suburb {
+      stroke: #3182bd;
+      fill: #deebf7;
+    }
+  </code></pre>
+</section>
 
 <section>
 (picture of Google Maps with lots of pins)
