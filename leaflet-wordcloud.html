@@ -1,7 +1,25 @@
 <!DOCTYPE html>
 <meta charset="utf-8">
+<link rel="stylesheet" href="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.css">
+
+<style type="text/css">
+  svg {
+    position: relative;
+    border: solid 1px blue;
+  }
+  #map {
+    height: 750px;
+  }
+</style>
+
 <body>
-<script src="js/d3.js"></script>
+
+<div id="map"></div>
+
+
+<script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js"></script>
+<script src="js/jquery-2.0.3.min.js"></script>
+<script src="js/d3.v3.min.js"></script>
 <script src="js/d3.layout.cloud.js"></script>
 <script src="sydjs-words.js"></script>
 <script>
@@ -9,7 +27,7 @@
 
   var layoutWords = function(wordset, fontScale) {
     var layout = d3.layout.cloud()
-          .size([800, 800])
+          .size([600, 600])
           .text(function(d) { return d.key; })
           .font("Impact")
           .fontSize(function(d) { return fontScale(+d.value); })
@@ -22,10 +40,10 @@
 
   function draw(word_data) {
     d3.select("body").append("svg")
-        .attr("width", 800)
-        .attr("height", 600)
+        .attr("width", 300)
+        .attr("height", 300)
       .append("g")
-        .attr("transform", "translate(350,300)")
+//        .attr("transform", "translate(350,300)")
       .selectAll("text")
         .data(word_data)
       .enter().append("text")
@@ -44,9 +62,9 @@
   var wordsets = [];
   var max_count = 0;
 
-  words.forEach(function(word_array) {
+  data.forEach(function(item) {
     var word_hash = {};
-    word_array.forEach(function(word) {
+    item.words.forEach(function(word) {
       if (stopwords.indexOf(word) !== -1) {
         return;
       }
@@ -72,5 +90,71 @@
     layoutWords(wordset, fontScale);
   });
 
+
+$(function() {
+
+var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: 17})
+    .addLayer(new L.TileLayer("http://{s}.tile.cloudmade.com/20431b4bbf9e4c3f90399422715b6fa0/998/256/{z}/{x}/{y}.png"));
+
+var svg = d3.select(map.getPanes().overlayPane).append("svg");
+var g = [];
+g[0] = svg.append("g").attr("class", "leaflet-zoom-hide");
+
+// var transform = d3.geo.transform({point: projectPoint}),
+//     path = d3.geo.path().projection(transform);
+
+    var pt = { y: -33.8691, x: 151.20538 };
+    var coords = map.latLngToLayerPoint(new L.LatLng(pt.y, pt.x));
+
+    g[0].append("circle")
+            .attr("cx", coords.x)
+            .attr("cy", coords.y)
+            .attr("r", 100)
+            .style("fill", "red");
+
+
+
+  // Reposition the SVG to cover the features.
+  var resetSVG = function() {
+    // Loosely based on http://bost.ocks.org/mike/leaflet/
+    var topLeft = map.latLngToLayerPoint(mapTopLeft);
+    var bottomRight = map.latLngToLayerPoint(mapBottomRight);
+
+    svg .attr("width", bottomRight.x - topLeft.x)
+        .attr("height", bottomRight.y - topLeft.y)
+        .style("left", topLeft.x + "px")
+        .style("top", topLeft.y + "px");
+
+    var i = 0;
+    g[i].attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
+
+//    feature.attr("d", path);
+  }
+
+
+// var feature = g.selectAll("path")
+//     .data(collection.features)
+//   .enter().append("path");
+
+map.on("viewreset", resetSVG);
+//resetSVG();
+
+
+var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
+var mapBottomRight = map.layerPointToLatLng(L.point(
+  $("#map").height(),
+  $("#map").width()
+));
+
+resetSVG();
+
+
+  // Use Leaflet to implement a D3 geometric transformation.
+  // function projectPoint(x, y) {
+  //   var point = map.latLngToLayerPoint(new L.LatLng(y, x));
+  //   this.stream.point(point.x, point.y);
+  // }
+
+});
 
 </script>
