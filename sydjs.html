@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>SydJS January 2014: JavaScript Developers Don&#8217;t Get Lost</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Reveal.js theme -->
+  <link rel="stylesheet" href="css/reveal.css">
+<!--   <link rel="stylesheet" href="css/theme/default.css" id="theme">
+ -->
+  <!-- For syntax highlighting -->
+  <link rel="stylesheet" href="lib/css/zenburn.css">
+
+  <link href="css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">
+<!--   <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+  <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> -->
+  <link href="styles.css" rel="stylesheet">
+
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section>
+  <h1>JavaScript Devs Don&#8217;t Get Lost</h1>
+  <h3>A (re-)introduction to mapping in the browser</h3>
+
+  <address>
+    <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
+    <a href="mailto:hourann@datagami.info"><i class="fa fa-envelope"></i> hourann@datagami.info</a>
+    <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
+  </address>
+</section>
+
+
+
+<section data-background="image.png">
+  <h2>Where is Tapei, anyway?</h2>
+
+  <blockquote>&#8220;I personally believe that U.S. Americans are unable to do so because, uh, some, people out there in our nation don&#8217;t have maps&#8221;</blockquote>
+</section>
+
+
+<section data-background="image.png">
+  <h2>Where is Tapei, anyway?</h2>
+
+  <p>A story from</p>
+</section>
+
+<section>
+Along came the Google-borg
+
+<a href="http://niemann.blogs.nytimes.com/2010/03/10/my-way/">Art by Christoph Niemann</a> at the <a href="http://google-latlong.blogspot.com/2010/07/mapping-out-our-new-building-with-art.html">Googleplex</a>
+
+
+
+(picture of Google Maps with lots of pins)
+
+
+Surely there's a better way to present this data?
+
+
+
+OpenStreetMap: it&#8217;s pretty cool
+
+
+
+Tile providers
+
+
+Taken from a tiny <a href="http://skybox.com/">Skybox Imaging</a> <a href="http://en.wikipedia.org/wiki/CubeSat">CubeSat</a>
+
+
+
+Thanks!
+Questions?
+
+Hourann Bosci
+hourann@datagami.info
+@daBosq
+
+These slides: hourann.com/2014/sydjs
+</section>
+
+</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: true,
+    progress: true,
+    history: true,
+    center: true,
+
+    theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+    transition: 'page', // default/cube/page/concave/zoom/linear/fade/none
+
+    // Optional libraries used to extend on reveal.js
+    dependencies: [
+      { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+    ]
+  });
+
+</script>
+
+</body>
+</html>

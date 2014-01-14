@@ -1,0 +1,27 @@
+body {
+  font-family: "Proxima Nova", Lato, sans-serif;
+}
+
+
+.reveal h1, .reveal h3 {
+  font-weight: normal;
+}
+
+address {
+  width: 250px;
+  margin: 100px auto 0 auto;
+  font-style: normal;
+  text-align: left;
+  font-size: 17px;
+  line-height: 21px;
+}
+address a {
+  display: block;
+  text-decoration: none;
+  color: #0000cc;
+}
+address i {
+  display: inline-block;
+  width: 25px;
+  font-size: 15px;
+}
