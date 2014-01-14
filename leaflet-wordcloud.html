@@ -23,38 +23,38 @@
 <script src="js/d3.layout.cloud.js"></script>
 <script src="sydjs-words.js"></script>
 <script>
+
+$(function() {
   var fill = d3.scale.category10();
 
-  var layoutWords = function(wordset, fontScale) {
-    var layout = d3.layout.cloud()
-          .size([600, 600])
-          .text(function(d) { return d.key; })
-          .font("Impact")
-          .fontSize(function(d) { return fontScale(+d.value); })
-          .rotate(function(d) { return ~~(Math.random() * 4) * 45 - 90; })
-          .padding(1)
-          .on("end", draw)
-          .words(wordset)
-          .start();
-  }
-
-  function draw(word_data) {
-    d3.select("body").append("svg")
-        .attr("width", 300)
-        .attr("height", 300)
-      .append("g")
-//        .attr("transform", "translate(350,300)")
+  var draw = function(word_data, svg_el) {
+    svg_el
       .selectAll("text")
         .data(word_data)
       .enter().append("text")
         .style("font-size", function(d) { return d.size + "px"; })
-        .style("font-family", "Impact")
+        .style("font-family", "Impact, sans-serif")
         .style("fill", function(d, i) { return fill(i); })
         .attr("text-anchor", "middle")
         .attr("transform", function(d) {
           return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
         })
         .text(function(d) { return d.key; })
+  }
+
+  var layoutWords = function(wordset, i, fontScale) {
+    var layout = d3.layout.cloud()
+          .size([450, 450])
+          .text(function(d) { return d.key; })
+          .font("Impact")
+          .fontSize(function(d) { return fontScale(+d.value); })
+          .rotate(function(d) { return ~~(Math.random() * 4) * 45 - 90; })
+          .padding(1)
+          .on("end", function(word_data) {
+            draw(word_data, g[i]);
+          })
+          .words(wordset)
+          .start();
   }
 
   var stopwords = ["and", "the", "with", "for", "to", "of", "in", "from", "a", "can", "but", "get", "an", "so"];
@@ -85,32 +85,15 @@
     wordsets.push(wordset);
   });
 
-  var fontScale = d3.scale.log().range([10, max_count * 4]);
-  wordsets.forEach(function(wordset) {
-    layoutWords(wordset, fontScale);
-  });
-
-
-$(function() {
 
 var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: 17})
     .addLayer(new L.TileLayer("http://{s}.tile.cloudmade.com/20431b4bbf9e4c3f90399422715b6fa0/998/256/{z}/{x}/{y}.png"));
 
 var svg = d3.select(map.getPanes().overlayPane).append("svg");
 var g = [];
-g[0] = svg.append("g").attr("class", "leaflet-zoom-hide");
 
 // var transform = d3.geo.transform({point: projectPoint}),
 //     path = d3.geo.path().projection(transform);
-
-    var pt = { y: -33.8691, x: 151.20538 };
-    var coords = map.latLngToLayerPoint(new L.LatLng(pt.y, pt.x));
-
-    g[0].append("circle")
-            .attr("cx", coords.x)
-            .attr("cy", coords.y)
-            .attr("r", 100)
-            .style("fill", "red");
 
 
 
@@ -133,9 +116,13 @@ g[0] = svg.append("g").attr("class", "leaflet-zoom-hide");
         .style("left", topLeft.x + "px")
         .style("top", topLeft.y + "px");
 
-    var i = 0;
-    //translate(" + -topLeft.x + "," + -topLeft.y + ") 
-    g[i].attr("transform", "scale(" + xScale + " " + yScale + ")");
+    for (var i = 0; i < g.length; i ++) {
+      //translate(" + -topLeft.x + "," + -topLeft.y + ") 
+
+    var word_centre = map.latLngToLayerPoint(new L.LatLng(data[i].lat, data[i].long));
+
+      g[i].attr("transform", "scale(" + xScale + " " + yScale + ")translate(" + word_centre.x + "," + word_centre.y + ")");
+    }
 
 //    feature.attr("d", path);
   }
@@ -157,6 +144,20 @@ var mapBottomRight = map.layerPointToLatLng(L.point(
 
 var mapOriginalWidth = $("#map").width();
 var mapOriginalHeight = $("#map").height();
+
+    //translate(" + -topLeft.x + "," + -topLeft.y + ") 
+
+  var fontScale = d3.scale.log().range([5, max_count * 3]);
+  wordsets.forEach(function(wordset, idx) {
+
+    // var word_centre = map.latLngToLayerPoint(new L.LatLng(data[idx].lat, data[idx].long));
+
+    g[idx] = svg.append("g")
+              .attr("class", "leaflet-zoom-hide");
+              // .attr("transform", "translate(" + word_centre.x + "," + word_centre.y + ")");
+
+    layoutWords(wordset, idx, fontScale);
+  });
 
 resetSVG();
 
