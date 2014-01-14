@@ -50,6 +50,10 @@ p {
 
 }
 
+p img {
+  vertical-align: middle;
+}
+
 a {
   color: inherit;
 }
