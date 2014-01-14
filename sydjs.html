@@ -18,8 +18,8 @@
   <link rel="stylesheet" href="lib/css/zenburn.css">
 
   <link href="css/font-awesome-4.0.3/css/font-awesome.css" rel="stylesheet">
-<!--   <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
-  <link href="http://fonts.googleapis.com/css?family=Lato:400,700" rel="stylesheet"> -->
+<!--   <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet"> -->
+  <link href="http://fonts.googleapis.com/css?family=Lato:300,700" rel="stylesheet">
   <link href="styles.css" rel="stylesheet">
 
 </head>
@@ -31,11 +31,13 @@
   <h1>JavaScript Devs Don&#8217;t Get Lost</h1>
   <h3>A (re-)introduction to mapping in the browser</h3>
 
-  <address>
-    <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
-    <a href="mailto:hourann@datagami.info"><i class="fa fa-envelope"></i> hourann@datagami.info</a>
-    <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
-  </address>
+  <div class="address-block">
+    <address>
+      <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
+      <a href="mailto:hourann@datagami.info"><i class="fa fa-envelope"></i> hourann@datagami.info</a>
+      <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
+    </address>
+  </div>
 </section>
 
 
@@ -70,23 +72,95 @@ Surely there's a better way to present this data?
 OpenStreetMap: it&#8217;s pretty cool
 
 
-
-Tile providers
-
-
-Taken from a tiny <a href="http://skybox.com/">Skybox Imaging</a> <a href="http://en.wikipedia.org/wiki/CubeSat">CubeSat</a>
+The 
 
 
+Introducting ... Leaflet!
 
-Thanks!
-Questions?
-
-Hourann Bosci
-hourann@datagami.info
-@daBosq
-
-These slides: hourann.com/2014/sydjs
 </section>
+
+<section data-background="other-img/armchairantarcti.ca.png">
+  <h2 class="light-background" style="margin-top:30%">
+    When shouldn&#8217;t you use Leaflet?
+  </h2>
+</section>
+
+
+<section data-background="other-img/west-wing-screencap.png">
+  <h3 class="dark-background" style="margin-top:600px">&#8220;No, I&#8217;m wondering where France really is.&#8221;</h3>
+</section>
+
+
+<section>
+
+
+Things we skipped
+
+HTML5 Location API
+Place databases (Foursquare etc.)
+
+
+
+The future
+
+
+Vectors! Accelerated graphics! Oh my!
+
+
+
+
+</section>
+
+<section data-background="other-img/aau-sat.jpg">
+  <h2 class="dark-background" style="margin-top:500px">
+    Better, cheaper imagery:<br>
+    Skybox, Planet Labs, et al.
+  </h2>
+
+  <!--http://www.theatlantic.com/technology/archive/2014/01/silicon-valleys-new-spy-satellites/282580/-->
+</section>
+
+
+<section data-background="other-img/SkySat1Perth2.png">
+  <div class="light-background" style="margin-top:500px">
+    <p>Crown Perth casino, 4 Dec 2013</p>
+    <p><a href="http://www.firstimagery.skybox.com/2">www.firstimagery.skybox.com</a></p>
+    <p class="small">(a fraction of the price of Nearmap!)</p>
+  </div>
+</section>
+
+<section>
+
+For example: Public transport
+
+GTFS the default standard
+
+Transport for NSW currently the Australian leaders
+
+Other examples
+http://www.sightsmap.com/
+http://glimmer.rstudio.com/jcheng/leaflet-demo/
+
+</section>
+
+
+
+
+<section>
+  <h1>Thanks!</h1>
+  <h1>Questions?</h1>
+
+  <div class="address-block">
+    <address>
+      <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
+      <a href="mailto:hourann@datagami.info"><i class="fa fa-envelope"></i> hourann@datagami.info</a>
+      <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
+    </address>
+  </div>
+</section>
+
+
+<!-- These slides: hourann.com/2014/sydjs -->
 
 </div>
 </div>
@@ -99,8 +173,8 @@ These slides: hourann.com/2014/sydjs
   // Full list of configuration options available here:
   // https://github.com/hakimel/reveal.js#configuration
   Reveal.initialize({
-    controls: true,
-    progress: true,
+    controls: false,
+    progress: false,
     history: true,
     center: true,
 
