@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<body>
+<script src="js/d3.js"></script>
+<script src="js/d3.layout.cloud.js"></script>
+<script src="sydjs-words.js"></script>
+<script>
+  var fill = d3.scale.category10();
+
+  var layoutWords = function(wordset, fontScale) {
+    var layout = d3.layout.cloud()
+          .size([800, 800])
+          .text(function(d) { return d.key; })
+          .font("Impact")
+          .fontSize(function(d) { return fontScale(+d.value); })
+          .rotate(function(d) { return ~~(Math.random() * 4) * 45 - 90; })
+          .padding(1)
+          .on("end", draw)
+          .words(wordset)
+          .start();
+  }
+
+  function draw(word_data) {
+    d3.select("body").append("svg")
+        .attr("width", 800)
+        .attr("height", 600)
+      .append("g")
+        .attr("transform", "translate(350,300)")
+      .selectAll("text")
+        .data(word_data)
+      .enter().append("text")
+        .style("font-size", function(d) { return d.size + "px"; })
+        .style("font-family", "Impact")
+        .style("fill", function(d, i) { return fill(i); })
+        .attr("text-anchor", "middle")
+        .attr("transform", function(d) {
+          return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+        })
+        .text(function(d) { return d.key; })
+  }
+
+  var stopwords = ["and", "the", "with", "for", "to", "of", "in", "from", "a", "can", "but", "get", "an", "so"];
+
+  var wordsets = [];
+  var max_count = 0;
+
+  words.forEach(function(word_array) {
+    var word_hash = {};
+    word_array.forEach(function(word) {
+      if (stopwords.indexOf(word) !== -1) {
+        return;
+      }
+
+      if (word in word_hash) {
+        word_hash[word] ++;
+      } else {
+        word_hash[word] = 1;
+      }
+    });
+
+    var wordset = [];
+    for (var word in word_hash) {
+      wordset.push({ key: word, value: word_hash[word] });
+      if (word_hash[word] > max_count) { max_count = word_hash[word]; }
+    }
+
+    wordsets.push(wordset);
+  });
+
+  var fontScale = d3.scale.log().range([10, max_count * 4]);
+  wordsets.forEach(function(wordset) {
+    layoutWords(wordset, fontScale);
+  });
+
+
+</script>
