@@ -120,13 +120,22 @@ g[0] = svg.append("g").attr("class", "leaflet-zoom-hide");
     var topLeft = map.latLngToLayerPoint(mapTopLeft);
     var bottomRight = map.latLngToLayerPoint(mapBottomRight);
 
-    svg .attr("width", bottomRight.x - topLeft.x)
-        .attr("height", bottomRight.y - topLeft.y)
+    var newWidth = bottomRight.x - topLeft.x;
+    var xScale = newWidth / mapOriginalWidth;
+    var newHeight = bottomRight.y - topLeft.y;
+    var yScale = newHeight / mapOriginalHeight;
+    
+    // they normally should be equal?
+    console.log(xScale, yScale);
+
+    svg .attr("width", newWidth)
+        .attr("height", newHeight)
         .style("left", topLeft.x + "px")
         .style("top", topLeft.y + "px");
 
     var i = 0;
-    g[i].attr("transform", "translate(" + -topLeft.x + "," + -topLeft.y + ")");
+    //translate(" + -topLeft.x + "," + -topLeft.y + ") 
+    g[i].attr("transform", "scale(" + xScale + " " + yScale + ")");
 
 //    feature.attr("d", path);
   }
@@ -142,9 +151,12 @@ map.on("viewreset", resetSVG);
 
 var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
 var mapBottomRight = map.layerPointToLatLng(L.point(
-  $("#map").height(),
-  $("#map").width()
+  $("#map").width(),
+  $("#map").height()
 ));
+
+var mapOriginalWidth = $("#map").width();
+var mapOriginalHeight = $("#map").height();
 
 resetSVG();
 
