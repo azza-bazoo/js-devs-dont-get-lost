@@ -85,7 +85,9 @@ $(function() {
   });
 
 
-var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: 17})
+var mapOriginalZoom = 17;
+
+var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: mapOriginalZoom})
     .addLayer(new L.TileLayer("http://{s}.tile.cloudmade.com/20431b4bbf9e4c3f90399422715b6fa0/998/256/{z}/{x}/{y}.png"));
 
 var svg = d3.select(map.getPanes().overlayPane).append("svg");
@@ -99,36 +101,24 @@ var g = [];
   // Reposition the SVG to cover the features.
   var resetSVG = function() {
     // Loosely based on http://bost.ocks.org/mike/leaflet/
-    var topLeft = map.latLngToLayerPoint(mapTopLeft);
-    var bottomRight = map.latLngToLayerPoint(mapBottomRight);
 
-    var newWidth = bottomRight.x - topLeft.x;
-    var xScale = newWidth / mapOriginalWidth;
-    var newHeight = bottomRight.y - topLeft.y;
-    var yScale = newHeight / mapOriginalHeight;
-    
     var ctopleft = map.containerPointToLatLng(L.point(0,0));
     var ltopleft = map.latLngToLayerPoint(ctopleft);
     var cbottomright = map.containerPointToLatLng(L.point(mapOriginalWidth,mapOriginalHeight));
     var lbottomright = map.latLngToLayerPoint(cbottomright);
 
-    // they normally should be equal?
-    console.log(xScale, yScale);
+    var zoom_level = Math.pow(2, (map.getZoom() - mapOriginalZoom));
 
-    // svg .attr("width", newWidth)
-    //     .attr("height", newHeight)
     svg .style("left", ltopleft.x + "px")
         .style("top", ltopleft.y + "px");
 
     for (var i = 0; i < g.length; i ++) {
-      //translate(" + -topLeft.x + "," + -topLeft.y + ") 
 
-    var word_centre = map.latLngToContainerPoint(new L.LatLng(data[i].lat, data[i].long));
+      var word_centre = map.latLngToContainerPoint(new L.LatLng(data[i].lat, data[i].long));
 
-      g[i].attr("transform", "scale(" + xScale + " " + yScale + ")translate(" + (word_centre.x / xScale) + "," + (word_centre.y / yScale) + ")");
+      g[i].attr("transform", "scale(" + zoom_level + ")translate(" + (word_centre.x / zoom_level) + "," + (word_centre.y / zoom_level) + ")");
     }
 
-//    feature.attr("d", path);
   }
 
 
