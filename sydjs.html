@@ -302,6 +302,139 @@
   <img src="other-img/sydjs-email.png">
 </section>
 
+
+<section>
+  <h2>
+    I took the talk titles<br>
+    from when SydJS was at<br>
+    the old Atlassian building
+  </h2>
+  <pre><code>
+    words: [
+      "Archers", "vs", "Zombies!",
+      ...
+      "BlackBerry",
+      ...
+      "horrible", "kludges"
+    ]
+  </code></pre>
+</section>
+
+
+<section>
+  <h2>
+    And the titles of more recent talks<br>
+    here on George Street
+  </h2>
+  <pre><code>
+    words: [
+      "Faster,", "easier", "and", "safer",
+      ...
+      "AngularJS",
+      ...
+      "Tom", "Walker", "Cognizance"
+    ],
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin:0 0 20px 0">Then I made a word cloud</h2>
+
+  <img src="other-img/wordcloud.png" style="width:600px">
+
+  <h3><a href="http://www.jasondavies.com/wordcloud/">jasondavies.com/wordcloud/</a></h3>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    Why yes, I reinvented the (text-processing) wheel
+  </h3>
+
+  <pre><code>
+    var stopwords = ["and", "the", "with", "for", "to", "of", "in", "from", "a", "can", "but", "get", "an", "so"];
+
+    data.forEach(function(item) {
+      var word_hash = {};
+      item.words.forEach(function(word) {
+        if (stopwords.indexOf(word) !== -1) {
+          return;
+        }
+
+        if (word in word_hash) {
+          word_hash[word] ++;
+        } else {
+          word_hash[word] = 1;
+        }
+      });
+
+      var wordset = [];
+      for (var word in word_hash) {
+        wordset.push({ key: word, value: word_hash[word] });
+        if (word_hash[word] > max_count) { max_count = word_hash[word]; }
+      }
+    });
+  </code></pre>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    Using the WordCloud source, I rolled my own
+    <br>(part 1)
+  </h3>
+
+  <pre><code>
+    var fill = d3.scale.category10();
+
+    var draw = function(word_data, svg_el) {
+      svg_el
+        .selectAll("text")
+          .data(word_data)
+        .enter().append("text")
+          .style("font-size", function(d) { return d.size + "px"; })
+          .style("font-family", "Impact, sans-serif")
+          .style("fill", function(d, i) { return fill(i); })
+          .attr("text-anchor", "middle")
+          .attr("transform", function(d) {
+            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+          })
+          .text(function(d) { return d.key; })
+    }
+  </code></pre>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    Using the WordCloud source, I rolled my own
+    <br>(part 2)
+  </h3>
+
+  <pre><code>
+    var layoutWords = function(wordset, i, fontScale) {
+      var layout = d3.layout.cloud()
+            .size([450, 450])
+            .text(function(d) { return d.key; })
+            .font("Impact")
+            .fontSize(function(d) { return fontScale(+d.value); })
+            .rotate(function(d) { return ~~(Math.random() * 4) * 45 - 90; })
+            .padding(1)
+            .on("end", function(word_data) {
+              draw(word_data, g[i]);
+            })
+            .words(wordset)
+            .start();
+    }
+
+    var fontScale = d3.scale.log().range([5, max_count * 3]);
+
+    layoutWords(wordset, idx, fontScale);
+  </code></pre>
+</section>
+
+
 <section>
   <h2 style="margin-bottom:100px">The Future</h2>
 
