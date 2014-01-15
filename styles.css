@@ -88,6 +88,11 @@ a {
   overflow: hidden;
 }
 
+ul {
+  font-family: 40px;
+  line-height: 60px;
+}
+
 .small {
   font-size: smaller;
 }

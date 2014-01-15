@@ -48,17 +48,24 @@
   <img src="memes/6748218624.jpg">
 </section>
 
-<section data-background="other-img/wanganui-district-intramaps.png">
-  <h2 class="light-background">Mapping in the old days</h2><br><br>
+<section data-background="other-img/christoph_niemann_omelet.jpg">
+  <h2 class="light-background" style="margin-top:0">
+    You could always use Google Maps, right?
+  </h2>
 
-  <p class="light-background">Proprietary, not-very-exciting tools that require arcane incantations to use</p>
+  <p class="light-background" style="margin-top:400px">
+    Art by <a href="http://niemann.blogs.nytimes.com/2010/03/10/my-way/">Christoph Niemann</a> at the <a href="http://google-latlong.blogspot.com/2010/07/mapping-out-our-new-building-with-art.html">Googleplex</a>
+  </p>
 </section>
 
+<section data-background="other-img/google_stockholm.png">
+</section>
 
 <section>
-  <h2>The not-so-old days: Google Maps</h2>
-
-<a href="http://niemann.blogs.nytimes.com/2010/03/10/my-way/">Art by Christoph Niemann</a> at the <a href="http://google-latlong.blogspot.com/2010/07/mapping-out-our-new-building-with-art.html">Googleplex</a>
+  <h2 style="margin-top:200px">
+    If we just want a pretty picture,<br>
+    we can use D3.js or Snap.svg / Raphaël
+  </h2>
 </section>
 
 
@@ -159,58 +166,37 @@
   </code></pre>
 </section>
 
+
 <section>
-(picture of Google Maps with lots of pins)
-
-
-Surely there's a better way to present this data?
-
-
-
-OpenStreetMap: it&#8217;s pretty cool
-
-
-The 
-
-
-Introducting ... Leaflet!
-
-</section>
-
-
-<section data-background="image.png">
-  <h2>The tile providers</h2>
-
-  <p>
-    <img src="other-img/mapbox-vertical.png" alt="" style="max-height:140px;">
-    <img src="other-img/cloudmade.png" style="margin: 0 40px" alt="">
-  </p>
+  <img src="memes/1917840128.jpg">
+  <h2 style="margin-top:100px">
+    But I want an <em>interactive</em> map!
+  </h2>
 </section>
 
 
 <section>
-  <h3>Lots and lots of absolutely-positioned images</h3>
-
-  <p>
-    <img src="other-img/mapbox-vertical.png" alt="" style="max-height:140px;">
-    <img src="other-img/cloudmade.png" style="margin: 0 40px" alt="">
-  </p>
-</section>
-
-
-<section data-background="image.png">
-  <h2>Running your own tile server</h2>
-
-  <code>
-
-  </code>
+  <h2 style="margin-bottom:100px">
+    One option is OpenLayers
+  </h2>
+  <div class="img_clip">
+    <img src="other-img/openlayers.png">
+  </div>
 </section>
 
 
 <section data-background="other-img/armchairantarcti.ca.png">
-  <h2 class="light-background" style="margin-top:30%">
-    When shouldn&#8217;t you use Leaflet?
-  </h2>
+  <div class="light-background" style="margin-top:550px">
+    <p>Armchair Antarctica, GovHack Perth &#8220;best mapping application&#8221; winner</p>
+    <p><a href="http://armchairantarcti.ca">armchairantarcti.ca</a></p>
+  </div>
+</section>
+
+
+<section data-background="other-img/google-antarctica.png">
+  <p class="light-background" style="margin-top:100px">
+    Mercator: not so good for the south pole
+  </p>
 </section>
 
 
@@ -219,34 +205,101 @@ Introducting ... Leaflet!
 </section>
 
 
-<section data-background="image.png">
-  <h2 class="light-background">More than just base maps from Google</h2><br>
+<section>
+  <p style="margin-top:150px">
+    <img src="other-img/leaflet-logo.png">
+  </p>
+  <h2>Leaflet: an awesome modern option</h2>
+  <h3>(for most use cases)</h3>
+</section>
 
-  <h3 class="light-background" style="margin-top:300px">
-    Geolocation, Street View,<br>
-    driving directions, cycling, public transport
-  </h3>
+
+<section data-background="other-img/mapbox-example.png">
+  <p class="light-background" style="margin-top:550px">
+    Shanghai and Zhejiang province, as seen through Mapbox
+  </p>
 </section>
 
 
 <section>
+  <h2>Leaflet maps are made of <strong>layers</strong></h2>
+  <h3>(think Photoshop)</h3>
+
+  <p>
+    <img src="other-img/leaflet-layers.png">
+  </p>
+</section>
+
+<section data-background="image.png">
+  <h2 style="margin:80px 0">
+    The tile layer can come<br> from several different providers
+  </h2>
+
+  <p>
+    <img src="other-img/mapbox-vertical.png" alt="" style="max-height:140px;">
+    <img src="other-img/cloudmade.png" style="margin: 0 40px" alt="">
+  </p>
+
+  <h3>(... or you can roll your own)</h3>
+</section>
 
 
-Things we skipped
+<section>
+  <h3 style="margin-top:0">Lots and lots of absolutely-positioned images</h3>
 
-HTML5 Location API
-Place databases (Foursquare etc.)
-
-
-
-The future
-
-
-Vectors! Accelerated graphics! Oh my!
+  <div class="img_clip">
+    <img src="other-img/leaflet-tiles.png">
+  </div>
+</section>
 
 
+<section>
+  <h2 style="margin-top:100px">
+    There&#8217;s a strong plugin community
+  </h2>
+  <ul>
+    <li><a href="http://leaflet.github.io/Leaflet.markercluster/example/marker-clustering-realworld.388.html">Leaflet.markercluster</a></li>
+    <li><a href="http://leaflet.github.io/Leaflet.draw/">Leaflet.draw</a></li>
+    <li><a href="http://osmbuildings.org/?lat=52.52117&lon=13.40967&zoom=16">OSM Buildings</a></li>
+  </ul>
+</section>
 
 
+<section>
+  <h2 style="margin-top:200px">
+    It&#8217;s especially awesome for data visualisation
+  </h2>
+</section>
+
+
+<section>
+  <h2>
+    An example from a low-tech source
+  </h2>
+  <img src="other-img/7800_series.png">
+  <h3 style="margin-top:50px">
+    (with thanks to <a href="http://www.kineticit.com.au/">Kinetic IT</a> and <a href="http://watercorporation.com.au/">Water Corporation</a>)
+  </h3>
+</section>
+
+
+<section data-background="servicedeskmap/state.png">
+</section>
+
+
+<section data-background="servicedeskmap/PerthBunbury.png">
+</section>
+
+
+<section data-background="servicedeskmap/osbornepark.png">
+</section>
+
+
+<section>
+  <h2 style="margin:20px 0">
+    Now for a more immediate example
+  </h2>
+  <img src="other-img/sydjs-email.png">
 </section>
 
 <section>
@@ -272,15 +325,6 @@ Vectors! Accelerated graphics! Oh my!
     <p><a href="http://www.firstimagery.skybox.com/2">www.firstimagery.skybox.com</a></p>
     <p class="small">(a fraction of the price of Nearmap!)</p>
   </div>
-</section>
-
-
-<section data-background="other-img/aau-sat.jpg">
-  <h2 class="dark-background" style="margin-top:500px">
-    More open data
-  </h2>
-
-  <!--http://www.theatlantic.com/technology/archive/2014/01/silicon-valleys-new-spy-satellites/282580/-->
 </section>
 
 
