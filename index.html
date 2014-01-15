@@ -37,7 +37,7 @@
   <div class="address-block">
     <address>
       <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
-      <a href="mailto:hourann@datagami.info"><i class="fa fa-envelope"></i> hourann@datagami.info</a>
+      <a href="#" class="email"><i class="fa fa-envelope"></i> <span class="email"></span></a>
       <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
     </address>
   </div>
@@ -643,7 +643,7 @@
   <div class="address-block">
     <address>
       <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
-      <a href="mailto:hourann@datagami.info"><i class="fa fa-envelope"></i> hourann@datagami.info</a>
+      <a href="#" class="email"><i class="fa fa-envelope"></i> <span class="email"></span></a>
       <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
     </address>
   </div>
@@ -681,6 +681,24 @@
       { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
     ]
   });
+
+  // poor man's email obfuscation
+  var el = document.querySelectorAll(".email");
+  var parts = ["vasb", "qngntnzv", "ubhenaa", "znvygb"];
+  var rot13 = function(s) { // http://stackoverflow.com/a/617685
+    return s.replace(/[a-zA-Z]/g, function(c) {
+      return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);
+    });
+  }
+  for (var i = 0; i < el.length; i++) {
+    var m = rot13(parts[2]) + "@" + rot13(parts[1]) + "." + rot13(parts[0]);
+    if (el[i].tagName == "SPAN") {
+      el[i].innerHTML = m;
+    }
+    if (el[i].tagName == "A") {
+      el[i].setAttribute("href", rot13(parts[3]) + ":" + m);
+    }
+  }
 
 </script>
 
