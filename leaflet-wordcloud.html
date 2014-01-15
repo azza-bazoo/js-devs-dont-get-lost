@@ -130,14 +130,14 @@ map.on("moveend", resetSVG);
 //resetSVG();
 
 
-var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
-var mapBottomRight = map.layerPointToLatLng(L.point(
-  $("#map").width(),
-  $("#map").height()
-));
+// var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
+// var mapBottomRight = map.layerPointToLatLng(L.point(
+//   $("#map").width(),
+//   $("#map").height()
+// ));
 
-var mapOriginalWidth = $("#map").width();
-var mapOriginalHeight = $("#map").height();
+// var mapOriginalWidth = $("#map").width();
+// var mapOriginalHeight = $("#map").height();
 
     //translate(" + -topLeft.x + "," + -topLeft.y + ") 
 
@@ -153,13 +153,22 @@ var mapOriginalHeight = $("#map").height();
     layoutWords(wordset, idx, fontScale);
   });
 
-resetSVG();
+
+var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
+var mapBottomRight = map.layerPointToLatLng(L.point(
+  $("#map").width(),
+  $("#map").height()
+));
+
+var mapOriginalWidth = $("#map").width();
+var mapOriginalHeight = $("#map").height();
 
     svg .attr("width", mapOriginalWidth)
         .attr("height", mapOriginalHeight)
         .style("left", "0px")
         .style("top", "0px");
-
+        
+resetSVG();
 
   // Use Leaflet to implement a D3 geometric transformation.
   // function projectPoint(x, y) {
