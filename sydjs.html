@@ -222,7 +222,7 @@
 
 
 <section>
-  <h2>Leaflet maps are made of <strong>layers</strong></h2>
+  <h2>Leaflet maps are made of <em>layers</em></h2>
   <h3>(think Photoshop)</h3>
 
   <p>
@@ -392,7 +392,7 @@
     var fill = d3.scale.category10();
 
     var draw = function(word_data, svg_el) {
-      svg_el
+      d3.select("body").append("svg")
         .selectAll("text")
           .data(word_data)
         .enter().append("text")
@@ -439,6 +439,162 @@
 
 
 <section>
+  <h2 style="margin:20px 0 50px 0">
+    This gives us two boring clouds
+  </h2>
+  <img src="other-img/non-map-wordcloud.png">
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    So let&#8217;s create a map!
+  </h3>
+
+  <pre><code>
+    &lt;div id="map">&lt;/div>
+    &lt;script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js">&lt;/script>
+    &lt;script>
+
+    var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: 17});
+    var tileLayer = new L.TileLayer(
+      "http://{s}.tile.cloudmade.com/API_KEY/998/256/{z}/{x}/{y}.png"
+    );
+    map.addLayer(tileLayer);
+
+    &lt;/script>
+  </code></pre>
+</section>
+
+
+<section>
+  <img src="other-img/base-leaflet-sydney.png" style="width:95%">
+</section>
+
+
+<section>
+  <h2 style="margin-top:40px">
+    Then we get Leaflet&#8217;s <em>overlay pane</em>
+  </h2>
+  <pre><code>
+    map.getPanes().overlayPane
+  </code></pre>
+  <h2 style="margin-top:80px">
+    ... and add an SVG element to it
+  </h2>
+  <pre><code>
+    var svg = d3.select(map.getPanes().overlayPane).append("svg");
+  </code></pre>
+  <p style="margin-top:100px">
+    <a href="http://bost.ocks.org/mike/leaflet/">bost.ocks.org/mike/leaflet/</a>
+  </p>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    Now we render the clouds into that element
+  </h3>
+
+  <pre><code>
+    var fontScale = d3.scale.log().range([5, max_count * 3]);
+
+    wordsets.forEach(function(wordset, idx) {
+      g[idx] = svg.append("g")
+                .attr("class", "leaflet-zoom-hide");
+
+      layoutWords(wordset, idx, fontScale);
+    });
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin-top:80px">
+    Maybe you noticed we didn&#8217;t<br>
+    translate() those elements?
+  </h2>
+  <h2 style="margin-top:200px">
+    That&#8217;s because the map can <em>pan</em> and <em>zoom</em>!
+  </h2>
+</section>
+
+
+<section>
+  <h2 style="margin-top:100px">
+    We&#8217;ll respond to Leaflet movement events
+  </h2>
+
+  <pre><code>
+    map.on("moveend", resetSVG);
+  </code></pre>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    ... with some slightly clunky code
+  </h3>
+
+  <pre><code>
+    var resetSVG = function() {
+      var ctopleft = map.containerPointToLatLng(
+        L.point(0,0)
+      );
+      var ltopleft = map.latLngToLayerPoint(ctopleft);
+      var cbottomright = map.containerPointToLatLng(
+        L.point(mapOriginalWidth,mapOriginalHeight)
+      );
+      var lbottomright = map.latLngToLayerPoint(cbottomright);
+
+      svg .style("left", ltopleft.x + "px")
+          .style("top", ltopleft.y + "px");
+
+      var zoom_level = Math.pow(2, (map.getZoom() - mapOriginalZoom));
+
+      for (var i = 0; i &lt; g.length; i ++) {
+        var word_centre = map.latLngToContainerPoint(new L.LatLng(data[i].lat, data[i].long));
+        g[i].attr(
+          "transform", "scale(" + zoom_level + ")"
+          + "translate(" + (word_centre.x / zoom_level) + "," + (word_centre.y / zoom_level) + ")"
+        );
+      }
+    }
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin-top:0">
+    There&#8217;s some glue code<br>
+    to get everything started
+  </h2>
+
+  <pre><code>
+    var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
+    var mapBottomRight = map.layerPointToLatLng(L.point(
+      $("#map").width(),
+      $("#map").height()
+    ));
+
+    var mapOriginalWidth = $("#map").width();
+    var mapOriginalHeight = $("#map").height();
+
+    svg .attr("width", mapOriginalWidth)
+        .attr("height", mapOriginalHeight)
+        .style("left", "0px")
+        .style("top", "0px");
+
+    resetSVG();
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin-top:250px">Et voil&agrave;!</h2>
+</section>
+
+<section>
   <h2 style="margin-bottom:100px">The Future</h2>
 
   <img src="memes/4381640704.jpg" alt="">
@@ -468,8 +624,10 @@
   <h2>Vectors and The Third Dimension</h2>
 
   <h3 style="margin-top:300px">
-    New Google Maps has lidar / laser altimetry
+    New Google Maps has lidar / laser altimetry<br>
+    <em>plus</em> Street View image processing
   </h3>
+  <p>(rather like iOS Maps flyover)</p>
 </section>
 
 
