@@ -85,71 +85,12 @@ $(function() {
   });
 
 
-var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: 17})
-    .addLayer(new L.TileLayer("http://{s}.tile.cloudmade.com/20431b4bbf9e4c3f90399422715b6fa0/998/256/{z}/{x}/{y}.png"));
-
-var svg = d3.select(map.getPanes().overlayPane).append("svg");
+var svg = d3.select("#map").append("svg")
 var g = [];
 
 // var transform = d3.geo.transform({point: projectPoint}),
 //     path = d3.geo.path().projection(transform);
 
-
-
-  // Reposition the SVG to cover the features.
-  var resetSVG = function() {
-    // Loosely based on http://bost.ocks.org/mike/leaflet/
-    var topLeft = map.latLngToLayerPoint(mapTopLeft);
-    var bottomRight = map.latLngToLayerPoint(mapBottomRight);
-
-    var newWidth = bottomRight.x - topLeft.x;
-    var xScale = newWidth / mapOriginalWidth;
-    var newHeight = bottomRight.y - topLeft.y;
-    var yScale = newHeight / mapOriginalHeight;
-    
-    var ctopleft = map.containerPointToLatLng(L.point(0,0));
-    var ltopleft = map.latLngToLayerPoint(ctopleft);
-    var cbottomright = map.containerPointToLatLng(L.point(mapOriginalWidth,mapOriginalHeight));
-    var lbottomright = map.latLngToLayerPoint(cbottomright);
-
-    // they normally should be equal?
-    console.log(xScale, yScale);
-
-    // svg .attr("width", newWidth)
-    //     .attr("height", newHeight)
-    svg .style("left", ltopleft.x + "px")
-        .style("top", ltopleft.y + "px");
-
-    for (var i = 0; i < g.length; i ++) {
-      //translate(" + -topLeft.x + "," + -topLeft.y + ") 
-
-    var word_centre = map.latLngToContainerPoint(new L.LatLng(data[i].lat, data[i].long));
-
-      g[i].attr("transform", "scale(" + xScale + " " + yScale + ")translate(" + (word_centre.x / xScale) + "," + (word_centre.y / yScale) + ")");
-    }
-
-//    feature.attr("d", path);
-  }
-
-
-// var feature = g.selectAll("path")
-//     .data(collection.features)
-//   .enter().append("path");
-
-map.on("moveend", resetSVG);
-//resetSVG();
-
-
-var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
-var mapBottomRight = map.layerPointToLatLng(L.point(
-  $("#map").width(),
-  $("#map").height()
-));
-
-var mapOriginalWidth = $("#map").width();
-var mapOriginalHeight = $("#map").height();
-
-    //translate(" + -topLeft.x + "," + -topLeft.y + ") 
 
   var fontScale = d3.scale.log().range([5, max_count * 3]);
   wordsets.forEach(function(wordset, idx) {
@@ -157,18 +98,10 @@ var mapOriginalHeight = $("#map").height();
     // var word_centre = map.latLngToLayerPoint(new L.LatLng(data[idx].lat, data[idx].long));
 
     g[idx] = svg.append("g")
-              .attr("class", "leaflet-zoom-hide");
-              // .attr("transform", "translate(" + word_centre.x + "," + word_centre.y + ")");
+              .attr("transform", "translate(" + (450 * (idx + 0.5)) + " 320)");
 
     layoutWords(wordset, idx, fontScale);
   });
-
-resetSVG();
-
-    svg .attr("width", mapOriginalWidth)
-        .attr("height", mapOriginalHeight)
-        .style("left", "0px")
-        .style("top", "0px");
 
 
   // Use Leaflet to implement a D3 geometric transformation.
