@@ -24,10 +24,13 @@
 <script>
 
 $(function() {
+  // one of D3's built-in scales, with 10 more-or-less random (but reasonable) colours
   var fill = d3.scale.category10();
 
-  var draw = function(word_data, svg_el) {
-    svg_el
+  // draw a text element for one word into the passed SVG group; these functions based on
+  // https://github.com/jasondavies/d3-cloud/blob/master/examples/simple.html
+  var draw = function(word_data, group_el) {
+    group_el
       .selectAll("text")
         .data(word_data)
       .enter().append("text")
@@ -41,6 +44,7 @@ $(function() {
         .text(function(d) { return d.key; })
   }
 
+  // run the word cloud layout on the whole wordset, rendering into the i'th group element
   var layoutWords = function(wordset, i, fontScale) {
     var layout = d3.layout.cloud()
           .size([450, 450])
@@ -59,8 +63,10 @@ $(function() {
   var stopwords = ["and", "the", "with", "for", "to", "of", "in", "from", "a", "can", "but", "get", "an", "so"];
 
   var wordsets = [];
-  var max_count = 0;
+  var max_count = 0;  // used to set font size scale
 
+  // fairly braindead text processing: filter out stopwords, count occurrences,
+  // generate an array of objects for use in the word cloud code
   data.forEach(function(item) {
     var word_hash = {};
     item.words.forEach(function(word) {
@@ -85,35 +91,32 @@ $(function() {
   });
 
 
-var mapOriginalZoom = 17;
+  // setup Leaflet map: centre location and zoom level are handpicked for presentation
+  var mapOriginalZoom = 17;
 
-var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: mapOriginalZoom})
-    .addLayer(new L.TileLayer("http://{s}.tile.cloudmade.com/20431b4bbf9e4c3f90399422715b6fa0/998/256/{z}/{x}/{y}.png"));
+  var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: mapOriginalZoom})
+      .addLayer(new L.TileLayer("http://{s}.tile.cloudmade.com/20431b4bbf9e4c3f90399422715b6fa0/998/256/{z}/{x}/{y}.png"));
 
-var svg = d3.select(map.getPanes().overlayPane).append("svg");
-var g = [];
-
-// var transform = d3.geo.transform({point: projectPoint}),
-//     path = d3.geo.path().projection(transform);
-
+  // add elements for use with D3 into the overlay pane
+  var svg = d3.select(map.getPanes().overlayPane).append("svg");
+  var g = [];
 
 
-  // Reposition the SVG to cover the features.
+  // reposition the SVG when the user zooms or pans, so the whole word cloud is visible
   var resetSVG = function() {
     // Loosely based on http://bost.ocks.org/mike/leaflet/
-
+    // TODO: possible alternative approach at http://stackoverflow.com/a/16473294/1523020
     var ctopleft = map.containerPointToLatLng(L.point(0,0));
     var ltopleft = map.latLngToLayerPoint(ctopleft);
-    var cbottomright = map.containerPointToLatLng(L.point(mapOriginalWidth,mapOriginalHeight));
-    var lbottomright = map.latLngToLayerPoint(cbottomright);
 
     var zoom_level = Math.pow(2, (map.getZoom() - mapOriginalZoom));
 
-    svg .style("left", ltopleft.x + "px")
-        .style("top", ltopleft.y + "px");
+    // the SVG moves when the user pans, so put it back to being exactly on top of the map
+    svg.style("left", ltopleft.x + "px")
+       .style("top", ltopleft.y + "px");
 
     for (var i = 0; i < g.length; i ++) {
-
+      // recalculate pixel coords of where the word cloud centre should be (changes when the user zooms)
       var word_centre = map.latLngToContainerPoint(new L.LatLng(data[i].lat, data[i].long));
 
       g[i].attr("transform", "scale(" + zoom_level + ")translate(" + (word_centre.x / zoom_level) + "," + (word_centre.y / zoom_level) + ")");
@@ -122,59 +125,27 @@ var g = [];
   }
 
 
-// var feature = g.selectAll("path")
-//     .data(collection.features)
-//   .enter().append("path");
-
-map.on("moveend", resetSVG);
-//resetSVG();
-
-
-// var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
-// var mapBottomRight = map.layerPointToLatLng(L.point(
-//   $("#map").width(),
-//   $("#map").height()
-// ));
-
-// var mapOriginalWidth = $("#map").width();
-// var mapOriginalHeight = $("#map").height();
-
-    //translate(" + -topLeft.x + "," + -topLeft.y + ") 
-
+  // handpicked scale to look reasonable at our chosen zoom level
   var fontScale = d3.scale.log().range([5, max_count * 3]);
+
   wordsets.forEach(function(wordset, idx) {
-
-    // var word_centre = map.latLngToLayerPoint(new L.LatLng(data[idx].lat, data[idx].long));
-
     g[idx] = svg.append("g")
-              .attr("class", "leaflet-zoom-hide");
-              // .attr("transform", "translate(" + word_centre.x + "," + word_centre.y + ")");
+                .attr("class", "leaflet-zoom-hide");
 
     layoutWords(wordset, idx, fontScale);
   });
 
 
-var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
-var mapBottomRight = map.layerPointToLatLng(L.point(
-  $("#map").width(),
-  $("#map").height()
-));
+  // initial SVG setup: it should be exactly on top of the map (same size and position)
+  svg.attr("width", $("#map").width())
+     .attr("height", $("#map").height())
+     .style("left", "0px")
+     .style("top", "0px");
 
-var mapOriginalWidth = $("#map").width();
-var mapOriginalHeight = $("#map").height();
-
-    svg .attr("width", mapOriginalWidth)
-        .attr("height", mapOriginalHeight)
-        .style("left", "0px")
-        .style("top", "0px");
-        
-resetSVG();
-
-  // Use Leaflet to implement a D3 geometric transformation.
-  // function projectPoint(x, y) {
-  //   var point = map.latLngToLayerPoint(new L.LatLng(y, x));
-  //   this.stream.point(point.x, point.y);
-  // }
+  
+  // register map-moving event handler with Leaflet, and do an initialisation so it looks right on load
+  map.on("moveend", resetSVG);
+  resetSVG();
 
 });
 
