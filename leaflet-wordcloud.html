@@ -20,7 +20,10 @@
 <script src="js/jquery-2.0.3.min.js"></script>
 <script src="js/d3.v3.min.js"></script>
 <script src="js/d3.layout.cloud.js"></script>
+
+<script src="perthjs-words.js"></script>
 <script src="sydjs-words.js"></script>
+
 <script>
 
 $(function() {
@@ -65,6 +68,16 @@ $(function() {
   var wordsets = [];
   var max_count = 0;  // used to set font size scale
 
+  var mapOriginalZoom = 17;
+  var map_center = [-33.8691, 151.20538];
+  data = sydney_data;
+
+  if (document.location.search.indexOf("perth") !== -1) {
+    map_center = [-31.947, 115.850];
+    mapOriginalZoom = 15;
+    data = perth_data;
+  }
+
   // fairly braindead text processing: filter out stopwords, count occurrences,
   // generate an array of objects for use in the word cloud code
   data.forEach(function(item) {
@@ -92,9 +105,7 @@ $(function() {
 
 
   // setup Leaflet map: centre location and zoom level are handpicked for presentation
-  var mapOriginalZoom = 17;
-
-  var map = L.mapbox.map('map', 'azza-bazoo.i3j0e4nl').setView([-33.8691, 151.20538], mapOriginalZoom);
+  var map = L.mapbox.map('map', 'azza-bazoo.i3j0e4nl').setView(map_center, mapOriginalZoom);
 
   // add elements for use with D3 into the overlay pane
   var svg = d3.select(map.getPanes().overlayPane).append("svg");

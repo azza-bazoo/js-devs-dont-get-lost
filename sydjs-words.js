@@ -1,4 +1,4 @@
-var data = [
+var sydney_data = [
 
   {
     lat: -33.8708,
