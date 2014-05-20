@@ -1,0 +1,719 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>Perth.js May 2014: JavaScript Developers Don&#8217;t Get Lost</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+
+  <!-- Modified themes for Reveal.js and Highlight.js -->
+  <link rel="stylesheet" href="css/reveal.css">
+  <link rel="stylesheet" href="lib/css/zenburn.css">
+
+  <link href="http://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css" rel="stylesheet">
+
+  <link href='http://fonts.googleapis.com/css?family=Lato:300,300italic' rel='stylesheet' type='text/css'>
+  <link href="http://fonts.googleapis.com/css?family=Inconsolata:400,700" rel="stylesheet">
+
+  <link href="styles.css" rel="stylesheet">
+</head>
+<body>
+<div class="reveal">
+<div class="slides">
+
+<section>
+  <h1>JavaScript Devs Don&#8217;t Get Lost</h1>
+  <h3>A (re-)introduction to mapping in the browser</h3>
+
+  <div class="address-block">
+    <address>
+      <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
+      <a href="#" class="email"><i class="fa fa-envelope"></i> <span class="email"></span></a>
+      <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
+    </address>
+  </div>
+</section>
+
+<section>
+  <h2 style="margin-top:80px">
+    Why yes, we&#8217;re hiring
+  </h2>
+  <div>
+    <ul>
+      <li>Lots of JavaScript, especially D3 and Node</li>
+      <li>Lots of Python and R</li>
+      <li>Duct tape (and Chef) holding together Redis, RabbitMQ, nginx</li>
+      <li>Bits and pieces of C++, C#, Objective-C</li>
+    </ul>
+  </div>
+  <h3>
+    <a href="http://datagami.info">www.datagami.info</a>
+  </h2>
+</section>
+
+
+<section>
+  <img src="memes/6748218624.jpg">
+</section>
+
+<section data-background="other-img/christoph_niemann_omelet.jpg">
+  <h2 class="light-background" style="margin-top:0">
+    You could always use Google Maps, right?
+  </h2>
+
+  <p class="light-background" style="margin-top:400px">
+    Art by <a href="http://niemann.blogs.nytimes.com/2010/03/10/my-way/">Christoph Niemann</a> at the <a href="http://google-latlong.blogspot.com/2010/07/mapping-out-our-new-building-with-art.html">Googleplex</a>
+  </p>
+</section>
+
+<section data-background="other-img/google_stockholm.jpg">
+</section>
+
+<section>
+  <h2 style="margin-top:200px">
+    If we just want a pretty picture,<br>
+    we can use D3.js or Snap.svg / Raphaël
+  </h2>
+</section>
+
+
+<section>
+  <code>
+    <p>$ curl -Lo abs_suburbs.zip "http://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055003_ssc_2011_aust_shape.zip&amp;1270.0.55.003&amp;Data%20Cubes&amp;D68DFFC14D31F4E1CA2578D40013268D&amp;0&amp;July%202011&amp;22.07.2011&amp;Previous"</p>
+    <p>$ unzip abs_suburbs.zip</p>
+    <p>$ ogr2ogr -f GeoJSON sydney.geojson SSC_2011_AUST.shp -clipsrc 150.84 -33.73 151.32 -34.09</p>
+  </code>
+
+  <div style="margin-top:80px">
+    <img src="d3-map/abs_geography.png" style="width:80%" alt="">
+  </div>
+</section>
+
+<section>
+  <pre><code>
+    d3.json("sydney.geojson", function(error, map_features) {
+      console.log(map_features);
+    });
+  </code></pre>
+
+  <div style="margin-top:50px">
+    <img src="d3-map/geojson.png" alt="">
+  </div>
+</section>
+
+<section>
+  <pre><code>
+    var width = 900, height = 700;
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var projection = d3.geo.mercator()
+      .center([151.15, -33.90])
+      .scale(98000)
+      .translate([width / 2, height / 2]);
+
+    d3.json("sydney.geojson", function(error, map_features) {
+      svg.append("path")
+          .datum(map_features)
+          .attr("d", d3.geo.path().projection(projection));
+    });
+  </code></pre>
+</section>
+
+<section>
+  <div class="img_clip">
+    <img src="d3-map/single_path.png">
+  </div>
+</section>
+
+<section>
+  <pre><code>
+    var width = 900, height = 700;
+
+    var svg = d3.select("body").append("svg")
+        .attr("width", width)
+        .attr("height", height);
+
+    var projection = d3.geo.mercator()
+        .center([151.15, -33.88])
+        .scale(120000)
+        .translate([width / 2, height / 2]);
+
+    var path = d3.geo.path().projection(projection);
+
+    d3.json("sydney.geojson", function(error, map_features) {
+
+      svg.selectAll("path")
+          .data(map_features.features)
+          .enter().append("path")
+            .attr("class", "suburb")
+            .attr("d", path);
+
+    });
+  </code></pre>
+</section>
+
+<section>
+  <div class="img_clip">
+    <img src="d3-map/individual_paths.png">
+  </div>
+</section>
+
+<section data-background="d3-map/final.jpg">
+  <pre style="margin-top:430px;float:left;"><code>
+    svg {
+      background: #deebf7;
+    }
+
+    path.suburb {
+      stroke: #d95f0e;
+      fill: #fff7bc;
+    }
+  </code></pre>
+</section>
+
+
+<section>
+  <img src="memes/1917840128.jpg">
+  <h2 style="margin-top:100px">
+    But I want an <em>interactive</em> map!
+  </h2>
+</section>
+
+
+<section>
+  <h2 style="margin-bottom:100px">
+    One option is OpenLayers
+  </h2>
+  <div class="img_clip">
+    <img src="other-img/openlayers.png">
+  </div>
+</section>
+
+
+<section data-background="other-img/armchairantarcti.ca.jpg">
+  <div class="light-background" style="margin-top: 550px;background: rgba(90,90,90,0.9); padding-top: 0">
+    <p>Armchair Antarctica, GovHack Perth &#8220;best mapping application&#8221; winner</p>
+    <p><a href="http://armchairantarcti.ca">armchairantarcti.ca</a></p>
+  </div>
+</section>
+
+
+<section data-background="other-img/google-antarctica.jpg">
+  <h3 class="light-background" style="margin-top:120px">
+    Mercator: not so good for the south pole
+  </h3>
+</section>
+
+
+<section data-background="other-img/west-wing-screencap.jpg">
+  <h3 class="dark-background" style="margin-top:580px">&#8220;No, I&#8217;m wondering where France really is.&#8221;</h3>
+</section>
+
+
+<section>
+  <p style="margin-top:150px">
+    <img src="other-img/leaflet-logo.png">
+  </p>
+  <h2>Leaflet: an awesome modern option</h2>
+  <h3>(for most use cases)</h3>
+</section>
+
+
+<section data-background="other-img/mapbox-example.jpg">
+  <p class="light-background" style="margin-top:550px">
+    Shanghai and Zhejiang province, as seen through Mapbox
+  </p>
+</section>
+
+
+<section>
+  <h2>Leaflet maps are made of <em>layers</em></h2>
+  <h3>(think Photoshop)</h3>
+
+  <p>
+    <img src="other-img/leaflet-layers.png">
+  </p>
+</section>
+
+<section>
+  <h2 style="margin:80px 0">
+    The tile layer can come<br> from several different providers
+  </h2>
+
+  <p>
+    <img src="other-img/mapbox-vertical.png" alt="" style="max-height:140px;">
+    <img src="other-img/cloudmade.png" style="margin: 0 40px" alt="">
+  </p>
+
+  <h3>(... or you can roll your own)</h3>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">Lots and lots of absolutely-positioned images</h3>
+
+  <div class="img_clip">
+    <img src="other-img/leaflet-tiles.jpg">
+  </div>
+</section>
+
+
+<section>
+  <h2 style="margin-top:100px">
+    There&#8217;s a strong plugin community
+  </h2>
+  <ul>
+    <li><a href="http://leaflet.github.io/Leaflet.markercluster/example/marker-clustering-realworld.388.html">Leaflet.markercluster</a></li>
+    <li><a href="http://leaflet.github.io/Leaflet.draw/">Leaflet.draw</a></li>
+    <li><a href="http://osmbuildings.org/?lat=52.52117&amp;lon=13.40967&amp;zoom=16">OSM Buildings</a></li>
+  </ul>
+</section>
+
+
+<section data-background="other-img/doghouse-5414.jpg">
+  <h2 class="light-background" style="margin-top:400px">
+    Of course, the best maps are visualisations
+  </h2>
+  <p class="light-background" style="margin-top:10px">
+    <a href="http://thedoghousediaries.com/5414">thedoghousediaries.com/5414</a>
+  </p>
+</section>
+
+
+<section>
+  <h2>
+    An example from a low-tech source
+  </h2>
+  <img src="other-img/7800_series.png">
+  <h3 style="margin-top:50px">
+    (with thanks to <a href="http://www.kineticit.com.au/">Kinetic IT</a> and <a href="http://watercorporation.com.au/">Water Corporation</a>)
+  </h3>
+</section>
+
+
+<section data-background="servicedeskmap/state.jpg">
+</section>
+
+
+<section data-background="servicedeskmap/PerthBunbury.jpg">
+</section>
+
+
+<section data-background="servicedeskmap/osbornepark.jpg">
+</section>
+
+
+<section>
+  <h2 style="margin:20px 0">
+    Now for a more proximate example
+  </h2>
+  <img src="other-img/sydjs-email.png">
+</section>
+
+
+<section>
+  <h2>
+    I took the talk titles<br>
+    from when SydJS was at<br>
+    the old Atlassian building
+  </h2>
+  <pre><code>
+    words: [
+      "Archers", "vs", "Zombies!",
+      ...
+      "BlackBerry",
+      ...
+      "horrible", "kludges"
+    ]
+  </code></pre>
+</section>
+
+
+<section>
+  <h2>
+    And the titles of more recent talks<br>
+    here on George Street
+  </h2>
+  <pre><code>
+    words: [
+      "Faster,", "easier", "and", "safer",
+      ...
+      "AngularJS",
+      ...
+      "Tom", "Walker", "Cognizance"
+    ],
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin:0 0 20px 0">Then I made a word cloud</h2>
+
+  <img src="other-img/wordcloud.png" style="width:600px">
+
+  <h3><a href="http://www.jasondavies.com/wordcloud/">jasondavies.com/wordcloud/</a></h3>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    Why yes, I reinvented the (text-processing) wheel
+  </h3>
+
+  <pre><code>
+    var stopwords = ["and", "the", "with", "for", "to", "of", "in", "from", "a", "can", "but", "get", "an", "so"];
+
+    data.forEach(function(item) {
+      var word_hash = {};
+      item.words.forEach(function(word) {
+        if (stopwords.indexOf(word) !== -1) {
+          return;
+        }
+
+        if (word in word_hash) {
+          word_hash[word] ++;
+        } else {
+          word_hash[word] = 1;
+        }
+      });
+
+      var wordset = [];
+      for (var word in word_hash) {
+        wordset.push({ key: word, value: word_hash[word] });
+        if (word_hash[word] > max_count) { max_count = word_hash[word]; }
+      }
+    });
+  </code></pre>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    Using the WordCloud source, I rolled my own
+    <br>(part 1)
+  </h3>
+
+  <pre><code>
+    var fill = d3.scale.category10();
+
+    var draw = function(word_data, svg_el) {
+      d3.select("body").append("svg")
+        .selectAll("text")
+          .data(word_data)
+        .enter().append("text")
+          .style("font-size", function(d) { return d.size + "px"; })
+          .style("font-family", "Impact, sans-serif")
+          .style("fill", function(d, i) { return fill(i); })
+          .attr("text-anchor", "middle")
+          .attr("transform", function(d) {
+            return "translate(" + [d.x, d.y] + ")rotate(" + d.rotate + ")";
+          })
+          .text(function(d) { return d.key; })
+    }
+  </code></pre>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    Using the WordCloud source, I rolled my own
+    <br>(part 2)
+  </h3>
+
+  <pre><code>
+    var layoutWords = function(wordset, i, fontScale) {
+      var layout = d3.layout.cloud()
+            .size([450, 450])
+            .text(function(d) { return d.key; })
+            .font("Impact")
+            .fontSize(function(d) { return fontScale(+d.value); })
+            .rotate(function(d) { return ~~(Math.random() * 4) * 45 - 90; })
+            .padding(1)
+            .on("end", function(word_data) {
+              draw(word_data, g[i]);
+            })
+            .words(wordset)
+            .start();
+    }
+
+    var fontScale = d3.scale.log().range([5, max_count * 3]);
+
+    layoutWords(wordset, idx, fontScale);
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin:20px 0 50px 0">
+    This gives us two boring clouds
+  </h2>
+  <img src="other-img/non-map-wordcloud.png">
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    So let&#8217;s create a map!
+  </h3>
+
+  <pre><code>
+    &lt;div id="map">&lt;/div>
+    &lt;script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js">&lt;/script>
+    &lt;script>
+
+      var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: 17});
+      var tileLayer = new L.TileLayer(
+        "http://{s}.tile.cloudmade.com/API_KEY/998/256/{z}/{x}/{y}.png"
+      );
+      map.addLayer(tileLayer);
+
+    &lt;/script>
+  </code></pre>
+</section>
+
+
+<section>
+  <img src="other-img/base-leaflet-sydney.jpg" style="width:95%">
+</section>
+
+
+<section>
+  <h2 style="margin-top:40px">
+    Then we get Leaflet&#8217;s <em>overlay pane</em>
+  </h2>
+  <pre><code>
+    map.getPanes().overlayPane
+  </code></pre>
+  <h2 style="margin-top:80px">
+    ... and add an SVG element to it
+  </h2>
+  <pre><code>
+    var svg = d3.select(map.getPanes().overlayPane).append("svg");
+  </code></pre>
+  <h3 style="margin-top:80px">
+    <a href="http://bost.ocks.org/mike/leaflet/">bost.ocks.org/mike/leaflet/</a>
+  </h3>
+</section>
+
+
+<section>
+  <h2 style="margin:80px 0">
+    Now render the clouds into that element
+  </h2>
+
+  <pre><code>
+    var fontScale = d3.scale.log().range([5, max_count * 3]);
+
+    wordsets.forEach(function(wordset, idx) {
+      g[idx] = svg.append("g")
+                .attr("class", "leaflet-zoom-hide");
+
+      layoutWords(wordset, idx, fontScale);
+    });
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin-top:80px">
+    Maybe you noticed we didn&#8217;t<br>
+    translate() those groups?
+  </h2>
+  <h2 style="margin-top:200px">
+    That&#8217;s because the map can <em>pan</em> and <em>zoom</em>!
+  </h2>
+</section>
+
+
+<section>
+  <h2 style="margin:100px 0">
+    We&#8217;ll respond to Leaflet movement events
+  </h2>
+
+  <pre><code>
+    map.on("moveend", resetSVG);
+  </code></pre>
+</section>
+
+
+<section>
+  <h3 style="margin-top:0">
+    ... with some slightly clunky code
+  </h3>
+
+  <pre><code>
+    var resetSVG = function() {
+      var ctopleft = map.containerPointToLatLng(
+        L.point(0,0)
+      );
+      var ltopleft = map.latLngToLayerPoint(ctopleft);
+      var cbottomright = map.containerPointToLatLng(
+        L.point(mapOriginalWidth,mapOriginalHeight)
+      );
+      var lbottomright = map.latLngToLayerPoint(cbottomright);
+
+      svg.style("left", ltopleft.x + "px")
+         .style("top", ltopleft.y + "px");
+
+      var zoom_level = Math.pow(2, (map.getZoom() - mapOriginalZoom));
+
+      for (var i = 0; i &lt; g.length; i ++) {
+        var word_centre = map.latLngToContainerPoint(new L.LatLng(data[i].lat, data[i].long));
+        g[i].attr(
+          "transform", "scale(" + zoom_level + ")"
+          + "translate(" + (word_centre.x / zoom_level) + "," + (word_centre.y / zoom_level) + ")"
+        );
+      }
+    }
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin-top:0">
+    There&#8217;s some glue code<br>
+    to get everything started
+  </h2>
+
+  <pre><code>
+    var mapTopLeft = map.layerPointToLatLng(L.point(0, 0));
+    var mapBottomRight = map.layerPointToLatLng(L.point(
+      $("#map").width(),
+      $("#map").height()
+    ));
+
+    var mapOriginalWidth = $("#map").width();
+    var mapOriginalHeight = $("#map").height();
+
+    svg .attr("width", mapOriginalWidth)
+        .attr("height", mapOriginalHeight)
+        .style("left", "0px")
+        .style("top", "0px");
+
+    resetSVG();
+  </code></pre>
+</section>
+
+
+<section>
+  <h2 style="margin-top:170px">Et voil&agrave;!</h2>
+  <h3 style="margin-top:100px">
+    <a href="http://hourann.com/2014/sydjs/leaflet-wordcloud.html">hourann.com/2014/sydjs/leaflet-wordcloud.html</a>
+  </h3>
+</section>
+
+<section>
+  <h2 style="margin-bottom:100px">The Future</h2>
+
+  <img src="memes/4381640704.jpg" alt="">
+</section>
+
+
+<section data-background="other-img/aau-sat.jpg">
+  <h2 class="dark-background" style="margin-top:500px">
+    Better, cheaper imagery:<br>
+    Skybox, Planet Labs, et al.
+  </h2>
+
+  <!--http://www.theatlantic.com/technology/archive/2014/01/silicon-valleys-new-spy-satellites/282580/-->
+</section>
+
+
+<section data-background="other-img/SkySat1Perth2.jpg">
+  <div class="light-background" style="margin-top:500px">
+    <p>Crown Perth casino, 4 Dec 2013</p>
+    <p><a href="http://www.firstimagery.skybox.com/2">www.firstimagery.skybox.com</a></p>
+    <p class="small">(a fraction of the price of Nearmap!)</p>
+  </div>
+</section>
+
+
+<section>
+  <h2>Vectors and The Third Dimension</h2>
+
+  <h3 style="margin-top:300px">
+    New <a href="https://www.google.com/maps/preview#!data=!1m7!1m3!1d559!2d115.9060466!3d-31.9607519!2m2!1f270!2f78.42!2m1!1e3&amp;fid=7">Google Maps</a> has lidar / laser altimetry<br>
+    <em>plus</em> Street View image processing
+  </h3>
+  <p>(like iOS Maps flyover, but with better data)</p>
+</section>
+
+
+
+<section>
+  <h1>Thanks!</h1>
+  <h1>Questions?</h1>
+
+  <p>
+    These slides: <a href="http://hourann.com/2014/sydjs">hourann.com/2014/sydjs</a>
+  </p>
+
+  <div class="address-block">
+    <address>
+      <a href="http://hourann.com" style="color:black"><i></i> Hourann Bosci</a>
+      <a href="#" class="email"><i class="fa fa-envelope"></i> <span class="email"></span></a>
+      <a href="http://twitter.com/daBosq"><i class="fa fa-twitter"></i> @daBosq</a>
+    </address>
+  </div>
+</section>
+
+
+</div>
+</div>
+
+<script src="lib/js/head.min.js"></script>
+<script src="js/reveal.min.js"></script>
+
+<script>
+
+  // Full list of configuration options available here:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: false,
+    progress: false,
+    history: true,
+    center: true,
+
+    theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+    transition: 'page', // default/cube/page/concave/zoom/linear/fade/none
+
+    // Optional libraries used to extend on reveal.js
+    dependencies: [
+      { src: 'lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: 'plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: 'plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      { src: 'plugin/zoom-js/zoom.js', async: true, condition: function() { return !!document.body.classList; } },
+      { src: 'plugin/notes/notes.js', async: true, condition: function() { return !!document.body.classList; } }
+    ]
+  });
+
+  // poor man's email obfuscation
+  var el = document.querySelectorAll(".email");
+  var parts = ["vasb", "qngntnzv", "ubhenaa", "znvygb"];
+  var rot13 = function(s) { // http://stackoverflow.com/a/617685
+    return s.replace(/[a-zA-Z]/g, function(c) {
+      return String.fromCharCode((c<="Z"?90:122)>=(c=c.charCodeAt(0)+13)?c:c-26);
+    });
+  }
+  for (var i = 0; i < el.length; i++) {
+    var m = rot13(parts[2]) + "@" + rot13(parts[1]) + "." + rot13(parts[0]);
+    if (el[i].tagName == "SPAN") {
+      el[i].innerHTML = m;
+    }
+    if (el[i].tagName == "A") {
+      el[i].setAttribute("href", rot13(parts[3]) + ":" + m);
+    }
+  }
+
+</script>
+
+</body>
+</html>
