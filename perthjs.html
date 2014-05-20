@@ -85,7 +85,7 @@
   <code>
     <p>$ curl -Lo abs_suburbs.zip "http://www.abs.gov.au/AUSSTATS/subscriber.nsf/log?openagent&amp;1270055003_ssc_2011_aust_shape.zip&amp;1270.0.55.003&amp;Data%20Cubes&amp;D68DFFC14D31F4E1CA2578D40013268D&amp;0&amp;July%202011&amp;22.07.2011&amp;Previous"</p>
     <p>$ unzip abs_suburbs.zip</p>
-    <p>$ ogr2ogr -f GeoJSON sydney.geojson SSC_2011_AUST.shp -clipsrc 150.84 -33.73 151.32 -34.09</p>
+    <p>$ ogr2ogr -f GeoJSON perth.geojson SSC_2011_AUST.shp -clipsrc 115.57 -32.70 116.23 -31.48</p>
   </code>
 
   <div style="margin-top:80px">
@@ -95,13 +95,13 @@
 
 <section>
   <pre><code>
-    d3.json("sydney.geojson", function(error, map_features) {
+    d3.json("perth.geojson", function(error, map_features) {
       console.log(map_features);
     });
   </code></pre>
 
   <div style="margin-top:50px">
-    <img src="d3-map/geojson.png" alt="">
+    <img src="d3-map/perth/geojson.png" alt="">
   </div>
 </section>
 
@@ -114,11 +114,11 @@
         .attr("height", height);
 
     var projection = d3.geo.mercator()
-      .center([151.15, -33.90])
+      .center([115.85, -31.95])
       .scale(98000)
       .translate([width / 2, height / 2]);
 
-    d3.json("sydney.geojson", function(error, map_features) {
+    d3.json("perth.geojson", function(error, map_features) {
       svg.append("path")
           .datum(map_features)
           .attr("d", d3.geo.path().projection(projection));
@@ -128,7 +128,7 @@
 
 <section>
   <div class="img_clip">
-    <img src="d3-map/single_path.png">
+    <img src="d3-map/perth/single_path.png">
   </div>
 </section>
 
@@ -141,13 +141,13 @@
         .attr("height", height);
 
     var projection = d3.geo.mercator()
-        .center([151.15, -33.88])
+        .center([115.85, -31.95])
         .scale(120000)
         .translate([width / 2, height / 2]);
 
     var path = d3.geo.path().projection(projection);
 
-    d3.json("sydney.geojson", function(error, map_features) {
+    d3.json("perth.geojson", function(error, map_features) {
 
       svg.selectAll("path")
           .data(map_features.features)
@@ -161,11 +161,11 @@
 
 <section>
   <div class="img_clip">
-    <img src="d3-map/individual_paths.png">
+    <img src="d3-map/perth/individual_paths.png">
   </div>
 </section>
 
-<section data-background="d3-map/final.jpg">
+<section data-background="d3-map/perth/final.png">
   <pre style="margin-top:430px;float:left;"><code>
     svg {
       background: #deebf7;
@@ -178,6 +178,33 @@
   </code></pre>
 </section>
 
+<section>
+  <h2 style="margin-top:60px">
+    Did someone say, &#8220;labels&#8221;?
+  </h2>
+  <p style="margin-bottom:40px">
+    <em>(in this dataset, SSC_NAME is the suburb name)</em>
+  </p>
+  <pre><code>
+        svg.selectAll("text")
+          .data(map_features.features)
+        .enter().append('text')
+         .attr('x', function(d){ return path.centroid(d)[0];})
+         .attr('y', function(d){ return path.centroid(d)[1];})
+         .text(function(d){return d.properties.SSC_NAME;});
+  </code></pre>
+</section>
+
+<section data-background="d3-map/perth/final-labels.png">
+  <pre style="margin-top:430px;float:left;"><code>
+    text {
+      text-anchor: middle;
+      font-family: sans-serif;
+      font-size: 9px;
+      fill: #3f0e5f;
+    }
+  </code></pre>
+</section>
 
 <section>
   <img src="memes/1917840128.jpg">
