@@ -259,24 +259,24 @@
 
 
 <section data-background="other-img/parkgraph-base-map.png">
-  <pre style="margin-top:350px"><code>
+  <pre style="margin-top:250px"><code>
     var map_el = d3.select("#display").append("svg")
         .attr("width", window.innerWidth)
         .attr("height", window.innerHeight);
 
-    var path_generator = d3.geo.path().projection(map.projection);
+    var projection = d3.geo.mercator()
+        .center([115.865, -31.958])
+        .translate([Math.floor(window.innerWidth / 2), Math.floor(window.innerHeight / 2)])
+        .scale(1200 * window.innerWidth - 26000);
+
+    var path_generator = d3.geo.path().projection(projection);
 
     map_el.append("path")
       .attr("class", "road")
       .datum(topojson.feature(map.data, map.data.objects.roads))
       .attr("d", path_generator);
   </code></pre>
-
-  <div>
-    <img srcstyle="width:75%" alt="">
-  </div>
 </section>
-
 
 
 <section>
