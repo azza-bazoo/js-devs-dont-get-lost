@@ -345,23 +345,23 @@
   <h2 style="margin:20px 0">
     Now for a more proximate example
   </h2>
-  <img src="other-img/sydjs-email.png">
+  <img src="other-img/perthjs-email.png">
 </section>
 
 
 <section>
   <h2>
-    I took the talk titles<br>
-    from when SydJS was at<br>
-    the old Atlassian building
+    I took talk titles<br>
+    and Meetup comments<br>
+    from our time at Spacecubed<br>
   </h2>
   <pre><code>
     words: [
-      "Archers", "vs", "Zombies!",
+      "Functional", "Programming", "with", "Underscore.js",
       ...
-      "BlackBerry",
+      "From", "Ball", "of", "Mud", "to", "Venus", "De", "Milo",
       ...
-      "horrible", "kludges"
+      "require([\"you\"­]..", "Inaugural", "PerthJS", "Meetup"
     ]
   </code></pre>
 </section>
@@ -369,17 +369,15 @@
 
 <section>
   <h2>
-    And the titles of more recent talks<br>
-    here on George Street
+    And titles from our two more recent<br>
+    meetups at Sync Labs
   </h2>
   <pre><code>
     words: [
-      "Faster,", "easier", "and", "safer",
+      "Mapping", "in", "May",
       ...
-      "AngularJS",
-      ...
-      "Tom", "Walker", "Cognizance"
-    ],
+      "Coffeescript", "and", "catch", "ups"
+    ]
   </code></pre>
 </section>
 
@@ -496,14 +494,13 @@
 
   <pre><code>
     &lt;div id="map">&lt;/div>
-    &lt;script src="http://cdn.leafletjs.com/leaflet-0.7.1/leaflet.js">&lt;/script>
+    &lt;script src="https://api.tiles.mapbox.com/mapbox.js/v1.6.3/mapbox.js">&lt;/script>
     &lt;script>
 
-      var map = new L.Map("map", {center: [-33.8691, 151.20538], zoom: 17});
-      var tileLayer = new L.TileLayer(
-        "http://{s}.tile.cloudmade.com/API_KEY/998/256/{z}/{x}/{y}.png"
-      );
-      map.addLayer(tileLayer);
+      var mapCenter = [-31.947, 115.850];
+      var mapZoom = 15;
+
+      var map = L.mapbox.map('map', 'azza-bazoo.i3j0e4nl').setView(mapCenter, mapZoom);
 
     &lt;/script>
   </code></pre>
@@ -511,7 +508,7 @@
 
 
 <section>
-  <img src="other-img/base-leaflet-sydney.jpg" style="width:95%">
+  <img src="other-img/base-leaflet-perth.jpg" style="width:95%">
 </section>
 
 
@@ -636,7 +633,7 @@
 <section>
   <h2 style="margin-top:170px">Et voil&agrave;!</h2>
   <h3 style="margin-top:100px">
-    <a href="http://hourann.com/2014/sydjs/leaflet-wordcloud.html">hourann.com/2014/sydjs/leaflet-wordcloud.html</a>
+    <!-- <a href="http://hourann.com/2014/sydjs/leaflet-wordcloud.html">hourann.com/2014/sydjs/leaflet-wordcloud.html</a> -->
   </h3>
 </section>
 
