@@ -20,7 +20,9 @@
 <script src="js/jquery-2.0.3.min.js"></script>
 <script src="js/d3.v3.min.js"></script>
 <script src="js/d3.layout.cloud.js"></script>
+
 <script src="sydjs-words.js"></script>
+<script src="perthjs-words.js"></script>
 <script>
 
 $(function() {
@@ -60,6 +62,11 @@ $(function() {
 
   var wordsets = [];
   var max_count = 0;
+
+  data = sydney_data;
+  if (document.location.search.indexOf("perth") !== -1) {
+    data = perth_data;
+  }
 
   data.forEach(function(item) {
     var word_hash = {};
