@@ -215,8 +215,73 @@
 
 
 <section>
+  <h2 style="margin-bottom:50px">
+    One option is to do everything with D3
+  </h2>
+  <h3 style="margin-bottom:50px">
+    <a href="http://orbis.stanford.edu/">orbis.stanford.edu</a>
+  </h3>
+  <div class="img_clip">
+    <img src="other-img/orbis.png">
+  </div>
+</section>
+
+
+<section>
+  <h2>
+    Everybody hates parking, right?
+  </h2>
+  <p>
+    <img src="other-img/parkgraph-source.png">
+    <span style="font-size: 24px; margin: 0 40px;">&#10140;</span>
+    <img src="other-img/parkgraph-miniature.png">
+  </p>
+  <h3>
+    <a href="http://parkgraph.com/">parkgraph.com</a>
+  </h3>
+</section>
+
+
+<section>
+  <code>
+    <p>
+    $ ogr2ogr -f GeoJSON \<br>
+      -where "type IN ('primary', 'secondary', 'tertiary', 'residential', 'motorway', 'trunk', 'primary_link', 'motorway_link', 'trunk_link', 'unclassified')" \<br>
+      -clipdst 115.837 -31.92 115.891 -31.99 \<br>
+      roads.json shape/roads.shp
+    </p>
+  </code>
+
+  <div style="margin-top:80px">
+    <img src="other-img/bbbike-download.png" alt="">
+  </div>
+</section>
+
+
+<section data-background="other-img/parkgraph-base-map.png">
+  <pre style="margin-top:350px"><code>
+    var map_el = d3.select("#display").append("svg")
+        .attr("width", window.innerWidth)
+        .attr("height", window.innerHeight);
+
+    var path_generator = d3.geo.path().projection(map.projection);
+
+    map_el.append("path")
+      .attr("class", "road")
+      .datum(topojson.feature(map.data, map.data.objects.roads))
+      .attr("d", path_generator);
+  </code></pre>
+
+  <div>
+    <img srcstyle="width:75%" alt="">
+  </div>
+</section>
+
+
+
+<section>
   <h2 style="margin-bottom:100px">
-    One option is OpenLayers
+    Another option is OpenLayers
   </h2>
   <div class="img_clip">
     <img src="other-img/openlayers.png">
