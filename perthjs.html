@@ -189,9 +189,9 @@
         svg.selectAll("text")
           .data(map_features.features)
         .enter().append('text')
-         .attr('x', function(d){ return path.centroid(d)[0];})
-         .attr('y', function(d){ return path.centroid(d)[1];})
-         .text(function(d){return d.properties.SSC_NAME;});
+          .attr('x', function(d){ return path.centroid(d)[0];})
+          .attr('y', function(d){ return path.centroid(d)[1];})
+          .text(function(d){return d.properties.SSC_NAME;});
   </code></pre>
 </section>
 
@@ -222,7 +222,7 @@
     <a href="http://orbis.stanford.edu/">orbis.stanford.edu</a>
   </h3>
   <div class="img_clip">
-    <img src="other-img/orbis.png">
+    <img src="other-img/orbis.jpg">
   </div>
 </section>
 
@@ -258,7 +258,7 @@
 </section>
 
 
-<section data-background="other-img/parkgraph-base-map.png">
+<section data-background="other-img/parkgraph-base-map.jpg">
   <pre style="margin-top:250px"><code>
     var map_el = d3.select("#display").append("svg")
         .attr("width", window.innerWidth)
@@ -342,7 +342,7 @@
   <p>
     <img src="other-img/mapbox-vertical.png" alt="" style="max-height:140px;">
     <span style="display: inline-block; margin: 0 40px; vertical-align: middle">
-      <img src="other-img/esri-logo.jpg" alt=""><br>
+      <img src="other-img/esri-logo.png" alt=""><br>
       (<a href="http://blogs.esri.com/esri/arcgis/2013/07/31/new-esri-open-source-javascript-projects-leaflet-geoservices-js-terraformer-pushlet/">sort of</a>)
     </span>
     <img src="other-img/stamen-screenshot.png" style="margin: 0 40px" alt="">
